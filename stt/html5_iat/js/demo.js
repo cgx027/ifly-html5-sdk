@@ -29,7 +29,7 @@ var iflytek = (function(document){
         volumeWrapper.style.display = "none";
 
         var listen = function(volume){
-            console.log("in VolumneEvent listen");
+            // console.log("in VolumneEvent listen");
             lastVolume = volume;
         };
         var draw = function(){
@@ -42,7 +42,7 @@ var iflytek = (function(document){
             animationId = requestAnimationFrame(draw);
         };
         var start = function(){
-            console.log("in VolumneEvent start");
+            // console.log("in VolumneEvent start");
             animationId = requestAnimationFrame(draw);
             volumeWrapper.style.display = "block";
         };
@@ -82,7 +82,7 @@ var iflytek = (function(document){
                 volumeEvent.stop();
             },
             "onVolume": function (volume) {
-                console.log("in onVolumn");
+                // console.log("in onVolumn");
                 volumeEvent.listen(volume);
             },
             "onError":function(){
@@ -93,16 +93,16 @@ var iflytek = (function(document){
             "onProcess": async function(status){
                 switch (status){
                     case 'onStart':
-                        console.log("onStart");
+                        // console.log("onStart");
                         tip.innerHTML = "服务初始化...";
                         break;
                     case 'normalVolume':
                     case 'started':
-                        console.log("on started");
+                        // console.log("on started");
                         tip.innerHTML = "倾听中...";
                         break;
                     case 'onStop':
-                        console.log("onStop");
+                        // console.log("onStop");
                         tip.innerHTML = "等待结果...";
                         break;
                     case 'onEnd':
@@ -111,16 +111,16 @@ var iflytek = (function(document){
                         console.log("in onEnd, to run play_content");
                         await play_content(ttsText);
                         mic_pressed = false;
-                        //session.stop();
+                        session.stop();
                         // start capture sound once again
-                        //play();
+                        play();
                         break;
                     case 'lowVolume':
-                        console.log("in lowVolumn");
+                        // console.log("in lowVolumn");
                         tip.innerHTML = "倾听中...(声音过小)";
                         break;
                     default:
-                        console.log("in default");
+                        // console.log("in default");
                         tip.innerHTML = status;
                 }
             }
@@ -132,7 +132,7 @@ var iflytek = (function(document){
         return;
     }
 
-    var play = function() {
+    function play() {
         if (!mic_pressed) {
             var ssb_param = {
                 "grammar_list": null,
@@ -140,6 +140,7 @@ var iflytek = (function(document){
             };
             iat_result.innerHTML = '   ';
             /* 调用开始录音接口，通过function(volume)和function(err, obj)回调音量和识别结果 */
+            console.log("Starting play session");
             session.start(ssb_param);
             mic_pressed = true;
             volumeEvent.start();
